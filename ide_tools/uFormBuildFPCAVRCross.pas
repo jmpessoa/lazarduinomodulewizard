@@ -421,13 +421,18 @@ end;
 
 procedure TFormBuildFPCAVRCross.PageControl1Change(Sender: TObject);
 begin
+  StatusBar1.SimpleText:='';
   if PageControl1.PageIndex = 2 then
   begin
      case FBuildMode of
-        bmAvr5: GroupBox3.Caption:= 'Install Cross Avr5 Arduino UNO';
+        bmAvr5: GroupBox3.Caption:= 'Install Cross Avr5 Arduino';
         bmAvr6: GroupBox3.Caption:= 'Install Cross Avr6 Arduino';
      end;
-  end
+  end;
+  if PageControl1.PageIndex = 0 then
+  begin
+    StatusBar1.SimpleText:=  '* Only if you do not have FPC trunk source      ** Mandatory...';
+  end;
 end;
 
 procedure TFormBuildFPCAVRCross.RadioGroup1Click(Sender: TObject);

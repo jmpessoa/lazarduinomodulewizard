@@ -238,7 +238,6 @@ begin
   //AProject.LazCompilerOptions.SmallerCode:= True;
   AProject.LazCompilerOptions.SmartLinkUnit:= True;
 
-  //AProject.LazCompilerOptions.OtherUnitFiles := '$(ProjOutDir)';  //-Fu
   AProject.LazCompilerOptions.IncludePath:='$(ProjOutDir)';         //-Fi
   AProject.LazCompilerOptions.UnitOutputDirectory := '\lib\$(TargetCPU)-$(TargetOS)';  //-FU
   AProject.LazCompilerOptions.TargetFilename:= FProjectName;   //-o

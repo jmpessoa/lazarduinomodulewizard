@@ -33,9 +33,9 @@ object FormBuildFPCAVRCross: TFormBuildFPCAVRCross
       Height = 226
       Top = 0
       Width = 416
-      ActivePage = TabSheet3
+      ActivePage = TabSheet1
       Align = alClient
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       OnChange = PageControl1Change
       object TabSheet1: TTabSheet
@@ -246,7 +246,7 @@ object FormBuildFPCAVRCross: TFormBuildFPCAVRCross
             Left = 10
             Height = 50
             Top = 104
-            Width = 294
+            Width = 302
             AutoFill = True
             Caption = 'Architecture/Instructions Set'
             ChildSizing.LeftRightSpacing = 6
@@ -257,12 +257,12 @@ object FormBuildFPCAVRCross: TFormBuildFPCAVRCross
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 3
             ClientHeight = 30
-            ClientWidth = 290
+            ClientWidth = 298
             Columns = 3
             ItemIndex = 0
             Items.Strings = (
-              'Avr5  [ATMega328p-UNO]'
-              'Avr6'
+              'Avr5 [ATMega328p-UNO]'
+              'Avr6 [ATMega2560]'
             )
             OnClick = RadioGroup1Click
             TabOrder = 3

@@ -112,9 +112,13 @@ begin
   FWorkspacePath:= EditBasePath.Text;
 
   case RadioGroupTarget.ItemIndex of
-    0: begin
+    0: begin    //UNO
          FTargetSpecific:= 'atmega328p'; //-Wp
          FInstructionSet:= 'avr5'     //-Cp
+       end;
+    1: begin   //MEGA
+         FTargetSpecific:= 'atmega2560'; //-Wp
+         FInstructionSet:= 'avr6'     //-Cp
        end;
   end;
 

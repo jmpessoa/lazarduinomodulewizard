@@ -114,7 +114,7 @@ object ArduinoFormWorkspace: TArduinoFormWorkspace
       Left = 8
       Height = 70
       Top = 160
-      Width = 160
+      Width = 176
       AutoFill = True
       Caption = 'Target:'
       ChildSizing.LeftRightSpacing = 6
@@ -125,10 +125,11 @@ object ArduinoFormWorkspace: TArduinoFormWorkspace
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 50
-      ClientWidth = 156
+      ClientWidth = 172
       ItemIndex = 0
       Items.Strings = (
         'Avr5 [Atmega328p/Uno]'
+        'Avr6 [ATMega2560/Mega]'
       )
       TabOrder = 1
     end

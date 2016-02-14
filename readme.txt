@@ -1,6 +1,6 @@
 
 Lamwino: Lazarus Arduino Module Wizard: 
-	Version 0.1		
+	Version 0.1 - 14 Feb - 2016		
 
 	"A wizard to create Arduino loadable module (.hex) using Lazarus/Free Pascal"
 		https://github.com/jmpessoa/lazarduinomodulewizard
@@ -24,6 +24,10 @@ Lamwino: Lazarus Arduino Module Wizard:
 		-HatForCat
 		-Engkin 
 			ref. http://forum.lazarus.freepascal.org/index.php/topic,30960.msg201921.html#msg201921
+
+Version 0.1 revision 01 - 14 Feb - 2016
+
+	NEW! Added support to Arduino Mega 2560
 
 1. Prerequisites/Infrastructure
 
