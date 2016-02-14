@@ -4,6 +4,7 @@ Lamwino: Lazarus Arduino Module Wizard:
 
 	"A wizard to create Arduino loadable module (.hex) using Lazarus/Free Pascal"
 		https://github.com/jmpessoa/lazarduinomodulewizard
+		http://forum.lazarus.freepascal.org/index.php?topic=31513.msg201993
 
 	Key Features:
 		1.Builder for FPC avr/arduino cross compiler
@@ -30,9 +31,9 @@ Lamwino: Lazarus Arduino Module Wizard:
 		ref. https://www.arduino.cc/en/Main/Software
 
 	SlikSvn: command line SVN client
-		ref. https://sliksvn.com/pub/Slik-Subversion-1.8.11-win32.msi
+		ref. https://sliksvn.com/pub/Slik-Subversion-1.8.11-win32.msi	[windows]
 
-	Optional: Serial-Monitor-Deluxe [Pure FPC/Lazarus app!!]
+	Optional: Serial-Monitor-Deluxe [Pure FPC/Lazarus app!!]	 [windows]
 		ref. http://www.idogendel.com/en/products/serial-monitor-deluxe
 
 2. Lamwino Install
@@ -81,7 +82,7 @@ Lamwino: Lazarus Arduino Module Wizard:
 
 		.Congratulations!!!  \o/ \o/ \o/ \o/
  
-		***
+		***How to Detect Arduino used COM Port
 		1.Windows 10 
 			Start Menu
 			Settings
@@ -120,3 +121,6 @@ Lamwino: Lazarus Arduino Module Wizard:
 		LamwinoDemo2  <<--- lesson3!
 
 Thanks to All!
+
+by jmpessoa
+[jmpessoa[AT]hotmail[DOT]com]

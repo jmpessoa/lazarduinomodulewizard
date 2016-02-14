@@ -127,11 +127,13 @@ begin
 
   saveDeviceCOMPort:= deviceCOMPort;
 
+  {$IFDEF WINDOWS}
   p:= Pos('COM', deviceCOMPort);
   if p > 0 then
   begin
      deviceCOMPort:= '\\.\' + deviceCOMPort;
   end;
+  {$ENDIF}
 
   with TIniFile.Create(configFile) do
   try
@@ -146,7 +148,7 @@ begin
     Params:= TStringList.Create;
     Tool := TIDEExternalToolOptions.Create;
     try
-      Tool.Title := 'Running Extern [avrdute] Tool ... ';
+      Tool.Title := 'Running Extern [avrdude] Tool ... ';
 
       pathToAvrdude:= pathToArduinoIDE + DirectorySeparator +
                                'hardware' + DirectorySeparator +
