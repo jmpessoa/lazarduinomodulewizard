@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="1">
+      <Unit0>
+        <Filename Value="lamwinodemo2.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LamwinoDemo2"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="56"/>
+        <CursorPos X="64" Y="74"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+    </Units>
+    <JumpHistory HistoryIndex="-1"/>
+  </ProjectSession>
+</CONFIG>
