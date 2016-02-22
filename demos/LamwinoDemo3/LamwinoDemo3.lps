@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="7">
+      <Unit0>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LamwinoDemo3"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="46"/>
+        <CursorPos X="13" Y="62"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LamwinoAvrSerial"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="219"/>
+        <CursorPos X="14" Y="243"/>
+        <UsageCount Value="54"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="synaser.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="96"/>
+        <CursorPos X="5" Y="108"/>
+        <UsageCount Value="1"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="synautil.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="1"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="synafpc.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos X="16" Y="62"/>
+        <UsageCount Value="1"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\laz4android\fpc\3.1.1\source\rtl\embedded\avr\atmega328p.pp"/>
+        <UnitName Value="ATmega328P"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="3" Y="10"/>
+        <UsageCount Value="24"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\laz4android\fpc\3.1.1\source\rtl\inc\heaph.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="78"/>
+        <CursorPos X="10" Y="92"/>
+        <UsageCount Value="7"/>
+      </Unit6>
+    </Units>
+    <JumpHistory Count="12" HistoryIndex="11">
+      <Position1>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="47" Column="27" TopLine="39"/>
+      </Position1>
+      <Position2>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="55" Column="37" TopLine="39"/>
+      </Position2>
+      <Position3>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="13" Column="26" TopLine="5"/>
+      </Position3>
+      <Position4>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="40" Column="7" TopLine="29"/>
+      </Position4>
+      <Position5>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="49" Column="17" TopLine="38"/>
+      </Position5>
+      <Position6>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="45" Column="19" TopLine="39"/>
+      </Position6>
+      <Position7>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="32" Column="11" TopLine="14"/>
+      </Position7>
+      <Position8>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="6" Column="11"/>
+      </Position8>
+      <Position9>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="49" Column="21" TopLine="33"/>
+      </Position9>
+      <Position10>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="30" TopLine="30"/>
+      </Position10>
+      <Position11>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="56" Column="16" TopLine="32"/>
+      </Position11>
+      <Position12>
+        <Filename Value="lamwinodemo3.lpr"/>
+        <Caret Line="31" Column="17" TopLine="21"/>
+      </Position12>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

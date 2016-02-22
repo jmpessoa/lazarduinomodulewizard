@@ -10,25 +10,27 @@ uses
 
 type
 
-  TGeneratedCode = (gcBlinking, gcMinimal);
+  TCodeTemplate = (ctMinimal, ctBlinking, ctSerial);
 
   { TArduinoFormWorkspace }
 
   TArduinoFormWorkspace = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    ComboBoxCodeTemplate: TComboBox;
     EditBasePath: TEdit;
     EditProjectName: TEdit;
     GroupBox1: TGroupBox;
+    GroupBoxCodeTemplate: TGroupBox;
     Label3: TLabel;
     Label4: TLabel;
     Panel1: TPanel;
     Panel3: TPanel;
-    RadioGroupGeneratedCode: TRadioGroup;
     RadioGroupTarget: TRadioGroup;
     selDir: TSelectDirectoryDialog;
     SpeedButton1: TSpeedButton;
     StatusBar1: TStatusBar;
+    procedure ComboBoxCodeTemplateChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
@@ -39,8 +41,10 @@ type
     FTargetSpecific: string; //-Wp
     FDeleteGeneratedAssembler: boolean; //-a
     FInstructionSet: string;  //-Cp
-    FGeneratedCode: TGeneratedCode;
+    FCodeTemplate: TCodeTemplate;
     FPathToArduinoIDE: string;
+    FPathToCodeTemplates: string;
+    //FBaud: string;
   public
     { public declarations }
     procedure LoadSettings(const pFilename: string);
@@ -52,8 +56,9 @@ type
     property TargetSpecific: string read FTargetSpecific write FTargetSpecific; //-Wp
     property DeleteGeneratedAssembler: boolean read FDeleteGeneratedAssembler write FDeleteGeneratedAssembler; //-a
     property InstructionSet: string  read FInstructionSet write FInstructionSet;  //-Cp
-    property GeneratedCode: TGeneratedCode  read FGeneratedCode write FGeneratedCode;
+    property CodeTemplate: TCodeTemplate  read FCodeTemplate write FCodeTemplate;
     property PathToArduinoIDE: string read FPathToArduinoIDE write FPathToArduinoIDE;
+    property PathToCodeTemplates: string read FPathToCodeTemplates write FPathToCodeTemplates;
 
   end;
 
@@ -89,6 +94,7 @@ begin
   begin
     FWorkspacePath := ReadString('NewProject', 'PathToWorkspace', '');
     FPathToArduinoIDE := ReadString('NewProject', 'PathToArduinoIDE', '');
+    FPathToCodeTemplates := ReadString('NewProject', 'PathToCodeTemplates', '');
     Free;
   end;
   EditBasePath.Text := FWorkspacePath;
@@ -101,6 +107,7 @@ begin
   begin
     WriteString('NewProject', 'PathToWorkspace', FWorkspacePath);
     WriteString('NewProject', 'PathToArduinoIDE', FPathToArduinoIDE);
+    WriteString('NewProject', 'PathToCodeTemplates', FPathToCodeTemplates);
     Free;
   end;
 end;
@@ -110,6 +117,7 @@ procedure TArduinoFormWorkspace.FormCloseQuery(Sender: TObject;
 begin
   FProjectName:= EditProjectName.Text;
   FWorkspacePath:= EditBasePath.Text;
+  //FBaud:= ComboBoxBaud.Text;
 
   case RadioGroupTarget.ItemIndex of
     0: begin    //UNO
@@ -124,11 +132,29 @@ begin
 
   FDeleteGeneratedAssembler:= False; //-a
 
-  case RadioGroupGeneratedCode.ItemIndex of
-     0: FGeneratedCode:= gcBlinking;
-     1: FGeneratedCode:= gcMinimal;
+  case ComboBoxCodeTemplate.ItemIndex of
+     0: FCodeTemplate:= ctMinimal;
+     1: FCodeTemplate:= ctBlinking;
+     2: FCodeTemplate:= ctSerial;
   end;
 
+end;
+
+procedure TArduinoFormWorkspace.ComboBoxCodeTemplateChange(Sender: TObject);
+var
+  userString: string;
+begin
+  if ComboBoxCodeTemplate.ItemIndex = 2 then //serial
+  begin
+     if FPathToCodeTemplates = '' then
+     begin
+        userString:= 'C:\lazarus\components\arduinomodulewizard\templates';
+        if InputQuery('Configure Path', 'Path to code templates', userString) then
+        begin
+           FPathToCodeTemplates:= userString;
+        end;
+     end;
+  end;
 end;
 
 end.

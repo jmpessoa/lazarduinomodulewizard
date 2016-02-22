@@ -23,8 +23,9 @@ type
     FTargetSpecific: string; //-Wp
     FDeleteGeneratedAssembler: boolean; //-a
     FInstructionSet: string;  //-Cp
-    FGeneratedCode: TGeneratedCode;
+    FCodeTemplate: TCodeTemplate;
     FPathToArduinoIDE: string;
+    FPathToCodeTemplates: string;
 
     function SettingsFilename: string;
     function GetWorkSpaceFromForm: boolean;
@@ -75,8 +76,9 @@ begin
     FInstructionSet:= frm.InstructionSet;  //-Cp
     FProjectName := trim(frm.ProjectName);
     FProjectPath := Trim(frm.WorkspacePath) + DirectorySeparator + FProjectName;
-    FGeneratedCode:= frm.GeneratedCode;
+    FCodeTemplate:= frm.CodeTemplate;
     FPathToArduinoIDE:= frm.PathToArduinoIDE;
+    FPathToCodeTemplates:= frm.PathToCodeTemplates;
 
     ForceDirectory(FProjectPath);
     chdir(FProjectPath);
@@ -137,13 +139,13 @@ begin
   Aproject.Title := FProjectName;
   NewSource:= TStringList.Create;
 
-  if FGeneratedCode = gcBlinking then
+  if FCodeTemplate = ctBlinking then
   begin
     NewSource.Add('program ' + FProjectName +'; //Lamwino: Lazarus Arduino Module Wizard :: '+DateTimeToStr(Now));
     NewSource.Add('//thanks to @ykot! ref. http://forum.lazarus.freepascal.org/index.php/topic,30960.0.html');
+    NewSource.Add('{$mode delphi}');
     NewSource.Add(' ');
     NewSource.Add('//uses');
-    NewSource.Add(' ');
     NewSource.Add(' ');
     NewSource.Add('const');
     NewSource.Add('  PB5 = 1 shl 5; //Bit 5 in "PortB" control UNO Pin13 [internal LED]');
@@ -158,7 +160,6 @@ begin
     NewSource.Add('  for I := 0 to 400000 do');
     NewSource.Add('    Dec(DelayVar);');
     NewSource.Add('end;');
-    NewSource.Add(' ');
     NewSource.Add(' ');
     NewSource.Add('begin');
     NewSource.Add(' ');
@@ -178,12 +179,13 @@ begin
     NewSource.Add('end.');
   end;
 
-  if FGeneratedCode = gcMinimal then
+  if FCodeTemplate = ctMinimal then
   begin
       NewSource.Add('program ' + FProjectName+'; //Lamwino: Lazarus Arduino Module Wizard :: '+DateTimeToStr(Now));
       NewSource.Add(' ');
-      NewSource.Add('//uses');
+      NewSource.Add('{$mode delphi}');
       NewSource.Add(' ');
+      NewSource.Add('//uses');
       NewSource.Add(' ');
       NewSource.Add('//const');
       NewSource.Add(' ');
@@ -197,11 +199,66 @@ begin
       NewSource.Add('  for I := 0 to 400000 do');
       NewSource.Add('    Dec(DelayVar);');
       NewSource.Add('end;');
-
+      NewSource.Add(' ');
       NewSource.Add('begin');
       NewSource.Add(' ');
       NewSource.Add('  while True do');
       NewSource.Add('  begin');
+      NewSource.Add(' ');
+      NewSource.Add('     SomeDelay;');
+      NewSource.Add(' ');
+      NewSource.Add('  end;');
+      NewSource.Add(' ');
+      NewSource.Add('end.');
+  end;
+
+  if FCodeTemplate = ctSerial then
+  begin
+      NewSource.Add('program ' + FProjectName+'; //Lamwino: Lazarus Arduino Module Wizard :: '+DateTimeToStr(Now));
+      NewSource.Add(' ');
+      NewSource.Add('{$mode delphi}');
+      NewSource.Add(' ');
+      NewSource.Add('uses');
+      NewSource.Add('  LamwinoAvrSerial;');
+      NewSource.Add(' ');
+      NewSource.Add('//const');
+      NewSource.Add(' ');
+      NewSource.Add('var');
+      NewSource.Add('  DelayVar: Integer = 0;');
+      NewSource.Add('  prompt: PChar;');
+      NewSource.Add('  ch: char;');
+      NewSource.Add(' ');
+      NewSource.Add('procedure SomeDelay; //by @ykot');
+      NewSource.Add('var');
+      NewSource.Add('  I: LongInt;');
+      NewSource.Add('begin');
+      NewSource.Add('  for I := 0 to 400000 do');
+      NewSource.Add('    Dec(DelayVar);');
+      NewSource.Add('end;');
+      NewSource.Add(' ');
+      NewSource.Add('begin');
+      NewSource.Add(' ');
+      NewSource.Add('  prompt:= ''Please, enter a char [or digit]: '';');
+      NewSource.Add(' ');
+      NewSource.Add('  Serial.Init(9600);');
+      NewSource.Add(' ');
+      NewSource.Add('  Serial.WriteString(''Hello World!'');');
+      NewSource.Add(' ');
+      NewSource.Add('  Serial.WriteLineBreak;');
+      NewSource.Add(' ');
+      NewSource.Add('  while True do');
+      NewSource.Add('  begin');
+      NewSource.Add(' ');
+      NewSource.Add('     Serial.WriteLineBreak;');
+      NewSource.Add(' ');
+      NewSource.Add('     Serial.WriteString(prompt);');
+      NewSource.Add(' ');
+      NewSource.Add('     Serial.WriteLineBreak;');
+      NewSource.Add(' ');
+      NewSource.Add('     ch:= Serial.ReadChar();');
+      NewSource.Add('     Serial.WriteChar(ch);');
+      NewSource.Add(' ');
+      NewSource.Add('     Serial.WriteLineBreak;');
       NewSource.Add(' ');
       NewSource.Add('     SomeDelay;');
       NewSource.Add(' ');
@@ -257,7 +314,6 @@ begin
     AProject.LazCompilerOptions.CustomOptions:= '-Cp'+FInstructionSet+ ' -Wp'+FTargetSpecific;
 
   AProject.CustomData.Values['LAMWINO'] := 'AVR';
-  //AProject.CustomData.Values['MODULENAME'] := FProjectName+ '.hex';
   AProject.CustomData.Values['AVRCHIP'] := FTargetSpecific;
 
   AProject.ProjectInfoFile := FProjectPath + DirectorySeparator + ChangeFileExt( FProjectName, '.lpi');
@@ -267,8 +323,47 @@ begin
 end;
 
 function TArduinoApplicationDescriptor.CreateStartFiles(AProject: TLazProject): TModalResult;
+var
+  templateList: TStringList;
+  pathToProjectInfo: TStringList;
+  auxPathToProject: string;
+  i: integer;
+  userString: string;
 begin
   if AProject=nil then Exit;
+
+  pathToProjectInfo:= TStringList.Create;
+  pathToProjectInfo.Delimiter:= DirectorySeparator;
+  pathToProjectInfo.StrictDelimiter:= True;
+  pathToProjectInfo.DelimitedText:=LazarusIDE.ActiveProject.ProjectInfoFile;
+
+  auxPathToProject:= pathToProjectInfo.Strings[0] + DirectorySeparator;
+
+  for i:=1 to  pathToProjectInfo.Count-2 do
+  begin
+     auxPathToProject:= auxPathToProject + pathToProjectInfo.Strings[i] + DirectorySeparator;
+  end;
+  pathToProjectInfo.Free;
+
+  templateList:= TStringList.Create;
+  if FCodeTemplate = ctSerial then
+  begin
+     if FPathToCodeTemplates = '' then
+     begin
+        userString:= 'C:\lazarus\components\arduinomodulewizard\templates';
+        if InputQuery('Configure Path', 'Path to code templates', userString) then
+        begin
+           FPathToCodeTemplates:= userString;
+        end;
+     end;
+     if  FPathToCodeTemplates <> '' then
+     begin
+       templateList.LoadFromFile(FPathToCodeTemplates+DirectorySeparator+'lamwinoavrserial.pas');
+       templateList.SaveToFile(auxPathToProject+'lamwinoavrserial.pas');
+     end;
+  end;
+  templateList.Free;
+
   LazarusIDE.DoSaveProject([sfSaveAs]);
   Result := mrOK;
 end;

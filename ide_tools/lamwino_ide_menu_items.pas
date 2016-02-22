@@ -45,6 +45,9 @@ var
   pathToAvrdude: string;
   strExt: string;
   saveDeviceCOMPort, savePathToArduinoIDE: string;
+  ComNr: integer;
+  strComNr: string;
+  appBaud: string;
 begin
 
   Project := LazarusIDE.ActiveProject;
@@ -59,6 +62,9 @@ begin
   end;
 
   avrCHIP:=  Project.CustomData.Values['AVRCHIP'];
+
+  appBaud:='';
+  //appBaud:=  Project.CustomData.Values['BAUD'];
 
   projectFullName:= LazarusIDE.ActiveProject.ProjectInfoFile;
   projectFullName:= ChangeFileExt(projectFullName, '.hex');
@@ -131,7 +137,10 @@ begin
   p:= Pos('COM', deviceCOMPort);
   if p > 0 then
   begin
-     deviceCOMPort:= '\\.\' + deviceCOMPort;
+    strComNr:= Copy(deviceCOMPort, 4, Length(deviceCOMPort));
+    ComNr:= StrToInt(strComNr);
+    if ComNr > 9 then
+      deviceCOMPort:= '\\.\' + deviceCOMPort;
   end;
   {$ENDIF}
 
@@ -168,14 +177,24 @@ begin
       //-D
       //-Uflash:w:Blinky.hex:i
 
+      if appBaud = '' then appBaud:='115200';
+
       Params.Add('-v');
       Params.Add('-p'+ avrCHIP);
       Params.Add('-carduino');
       Params.Add('-P'+deviceCOMPort);
-      Params.Add('-b115200');
-      Params.Add('-D');
-      Params.Add('-Uflash:w:'+projectFullName+':i');
+      //Params.Add('-b115200');
+      Params.Add('-b'+appBaud);
 
+      Params.Add('-D');
+
+      {
+      Params.Add('-Ulfuse:w:0xFF:m');
+      Params.Add('-Uhfuse:w:0xDF:m');
+      Params.Add('-Uefuse:w:0x05:m');
+      }
+
+      Params.Add('-Uflash:w:'+projectFullName+':i');
       strExt:= '';
       {$IFDEF WINDOWS}
       strExt:= '.exe';

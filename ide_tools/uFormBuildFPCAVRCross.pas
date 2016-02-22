@@ -19,14 +19,17 @@ TAVRBuildMode = (bmAvr5, bmAvr6);
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
-    EditPathToSVN: TEdit;
+    ComboBoxArchitec: TComboBox;
     EditPathToFPCTrunk: TEdit;
+    EditPathToSVN: TEdit;
     EditPathToArduinoIDE: TEdit;
     EditPathToFpc: TEdit;
     EditPathToFPCUnits: TEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -37,7 +40,7 @@ TAVRBuildMode = (bmAvr5, bmAvr6);
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel3: TPanel;
-    RadioGroup1: TRadioGroup;
+    RadioGroupInstruction: TRadioGroup;
     RadioGroup2: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SpeedButton1: TSpeedButton;
@@ -57,7 +60,7 @@ TAVRBuildMode = (bmAvr5, bmAvr6);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PageControl1Change(Sender: TObject);
-    procedure RadioGroup1Click(Sender: TObject);
+    procedure RadioGroupInstructionClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
@@ -73,6 +76,7 @@ TAVRBuildMode = (bmAvr5, bmAvr6);
     procedure LoadSettings(const fileName: string);
     procedure SaveSettings(const fileName: string);
     procedure CopyCrossUnits(const SourceDirName: string;  TargetDirName: string);
+    procedure FillComboArchitec();
 
   end;
 
@@ -226,7 +230,7 @@ begin
       strExt:= '.exe';
    {$ENDIF}
 
-   FBuildMode:= TAVRBuildMode(RadioGroup1.ItemIndex);
+   FBuildMode:= TAVRBuildMode(RadioGroupInstruction.ItemIndex);
 
    case FBuildMode of
       bmAvr5: instructionSet:= 'avr5';  //avr5/ATMega328p/UNO
@@ -322,9 +326,9 @@ var
   fpcPathTrunk: string;
   strExt: string;
   fpcUnitsPath: string;
-  sysTarget: string;
-  binutilsPath: string;
-  pathToArduinoIDE: string;
+  //sysTarget: string;
+  //binutilsPath: string;
+  //pathToArduinoIDE: string;
 begin
 
   Button3.Enabled:= False;
@@ -332,7 +336,7 @@ begin
   fpcExecutablesPath:= Trim(EditPathToFpc.Text); //C:\laz4android\fpc\3.0.0\bin\i386-win32
   fpcPathTrunk:= Trim(EditPathToFPCTrunk.Text);
   fpcUnitsPath:= Trim(EditPathToFPCUnits.Text);
-  pathToArduinoIDE:= Trim(EditPathToArduinoIDE.Text);
+  //pathToArduinoIDE:= Trim(EditPathToArduinoIDE.Text);
 
   if (fpcExecutablesPath = '') or  (fpcPathTrunk = '') or (fpcUnitsPath = '') then
   begin
@@ -342,11 +346,11 @@ begin
 
   //linux
   strExt:= '';
-  sysTarget:='i386-linux';
+  //sysTarget:='i386-linux';
 
   {$IFDEF WINDOWS}
      strExt:= '.exe';
-     sysTarget:= 'i386-win32';
+     //sysTarget:= 'i386-win32';
   {$ENDIF}
 
   if FileExists(fpcPathTrunk+DirectorySeparator+'compiler'+DirectorySeparator +'ppcrossavr'+strExt) then
@@ -407,11 +411,107 @@ begin
   Button3.Enabled:= True;
 end;
 
+procedure TFormBuildFPCAVRCross.FillComboArchitec();
+begin
+
+  ComboBoxArchitec.Text:= '';
+  ComboBoxArchitec.Items.Clear;
+  if RadioGroupInstruction.ItemIndex = 0 then
+  begin
+    ComboBoxArchitec.Items.Add('atmega328p'); //default Arduino UNO r3/lilypad
+    ComboBoxArchitec.Items.Add('atmega328');     //uno/lilypad
+    ComboBoxArchitec.Items.Add('atmega168'); //Nano/pro
+    ComboBoxArchitec.Items.Add('atmega32u4'); //leonardo/micro/esplora/yun/robot
+   (*ComboBoxArchitec.Items.Add('atmega645');
+    ComboBoxArchitec.Items.Add('atmega168p');
+    ComboBoxArchitec.Items.Add('atmega165a');
+    ComboBoxArchitec.Items.Add('atmega649a');
+    ComboBoxArchitec.Items.Add('atmega3250pa');
+    ComboBoxArchitec.Items.Add('atmega3290a');
+    ComboBoxArchitec.Items.Add('atmega165p');
+    ComboBoxArchitec.Items.Add('atmega16u4');
+    ComboBoxArchitec.Items.Add('atmega6490p');
+    ComboBoxArchitec.Items.Add('atmega324p');
+    ComboBoxArchitec.Items.Add('atmega64m1');
+    ComboBoxArchitec.Items.Add('atmega645p');
+    ComboBoxArchitec.Items.Add('atmega329a');
+    ComboBoxArchitec.Items.Add('atmega324pa');
+    ComboBoxArchitec.Items.Add('atmega32hvb');
+    ComboBoxArchitec.Items.Add('at90pwm316');
+    ComboBoxArchitec.Items.Add('at90usb646');
+    ComboBoxArchitec.Items.Add('atmega16');
+    ComboBoxArchitec.Items.Add('atmega644');
+    ComboBoxArchitec.Items.Add('at90can64');
+    ComboBoxArchitec.Items.Add('at90can32');
+    ComboBoxArchitec.Items.Add('at90pwm216');
+    ComboBoxArchitec.Items.Add('atmega3250a');
+    ComboBoxArchitec.Items.Add('atmega3290pa');
+    ComboBoxArchitec.Items.Add('atmega325p');
+    ComboBoxArchitec.Items.Add('atmega3250');
+    ComboBoxArchitec.Items.Add('atmega329');
+    ComboBoxArchitec.Items.Add('atmega32a');
+    ComboBoxArchitec.Items.Add('atmega6490');
+    ComboBoxArchitec.Items.Add('atmega168a');
+    ComboBoxArchitec.Items.Add('atmega164pa');
+    ComboBoxArchitec.Items.Add('atmega645a');
+    ComboBoxArchitec.Items.Add('atmega3290p');
+    ComboBoxArchitec.Items.Add('atmega644p');
+    ComboBoxArchitec.Items.Add('atmega164a');
+    ComboBoxArchitec.Items.Add('atmega162');
+    ComboBoxArchitec.Items.Add('atmega32c1');
+    ComboBoxArchitec.Items.Add('atmega324a');
+    ComboBoxArchitec.Items.Add('atmega169a');
+    ComboBoxArchitec.Items.Add('atmega644a');
+    ComboBoxArchitec.Items.Add('atmega3290');
+    ComboBoxArchitec.Items.Add('atmega64a');
+    ComboBoxArchitec.Items.Add('atmega169p');
+    ComboBoxArchitec.Items.Add('atmega32');
+    ComboBoxArchitec.Items.Add('atmega168pa');
+    ComboBoxArchitec.Items.Add('atmega16m1');
+    ComboBoxArchitec.Items.Add('atmega16hvb');
+    ComboBoxArchitec.Items.Add('atmega164p');
+    ComboBoxArchitec.Items.Add('atmega325a');
+    ComboBoxArchitec.Items.Add('atmega640');
+    ComboBoxArchitec.Items.Add('atmega6450');
+    ComboBoxArchitec.Items.Add('atmega329p');
+    ComboBoxArchitec.Items.Add('at90usb647');
+    ComboBoxArchitec.Items.Add('atmega6490a');
+    ComboBoxArchitec.Items.Add('atmega32m1');
+    ComboBoxArchitec.Items.Add('atmega64c1');
+    ComboBoxArchitec.Items.Add('atmega644pa');
+    ComboBoxArchitec.Items.Add('atmega325pa');
+    ComboBoxArchitec.Items.Add('atmega6450a');
+    ComboBoxArchitec.Items.Add('atmega329pa');
+    ComboBoxArchitec.Items.Add('atmega6450p');
+    ComboBoxArchitec.Items.Add('atmega64');
+    ComboBoxArchitec.Items.Add('atmega165pa');
+    ComboBoxArchitec.Items.Add('atmega16a');
+    ComboBoxArchitec.Items.Add('atmega649');
+    ComboBoxArchitec.Items.Add('atmega649p');
+    ComboBoxArchitec.Items.Add('atmega3250p');
+    ComboBoxArchitec.Items.Add('atmega325');
+    ComboBoxArchitec.Items.Add('atmega169pa');
+    ComboBoxArchitec.Items.Add('avrsim');*)
+  end else
+  if RadioGroupInstruction.ItemIndex = 1 then
+  begin
+    ComboBoxArchitec.Items.Add('atmega2560'); //Mega/Yun
+   //ComboBoxArchitec.Items.Add('atmega2561 ');
+  end;
+end;
+
 procedure TFormBuildFPCAVRCross.FormActivate(Sender: TObject);
 begin
+
   PageControl1.PageIndex:= 0;
-  FBuildMode:= bmAvr5;
   Self.LoadSettings(LazarusIDE.GetPrimaryConfigPath + DirectorySeparator + 'AVRArduinoProject.ini');
+
+
+  RadioGroupInstruction.ItemIndex:= 0;
+  FBuildMode:= bmAvr5;
+
+  FillComboArchitec();
+  ComboBoxArchitec.ItemIndex:= 0;
 end;
 
 procedure TFormBuildFPCAVRCross.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -421,6 +521,17 @@ end;
 
 procedure TFormBuildFPCAVRCross.PageControl1Change(Sender: TObject);
 begin
+  if PageControl1.ActivePageIndex <> 0 then
+  begin
+    if EditPathToFPCTrunk.Text = '' then
+    begin
+
+       ShowMessage('Please, Enter Path to FPC Source...');
+       PageControl1.ActivePageIndex:= 0;
+       Exit;
+    end;
+  end;
+
   StatusBar1.SimpleText:='';
   if PageControl1.PageIndex = 2 then
   begin
@@ -429,18 +540,24 @@ begin
         bmAvr6: GroupBox3.Caption:= 'Install Cross Avr6 Arduino';
      end;
   end;
+
   if PageControl1.PageIndex = 0 then
   begin
-    StatusBar1.SimpleText:=  '* Only if you do not have FPC trunk source      ** Mandatory...';
+    StatusBar1.SimpleText:=  '    * Mandatory...        ** Only if you do not have FPC trunk source';
   end;
+
 end;
 
-procedure TFormBuildFPCAVRCross.RadioGroup1Click(Sender: TObject);
+procedure TFormBuildFPCAVRCross.RadioGroupInstructionClick(Sender: TObject);
 begin
-  case RadioGroup1.ItemIndex of
+  case RadioGroupInstruction.ItemIndex of
     0: FBuildMode:= bmAvr5;
     1: FBuildMode:= bmAvr6;
   end;
+
+  FillComboArchitec();
+  ComboBoxArchitec.ItemIndex:= 0;
+
 end;
 
 procedure TFormBuildFPCAVRCross.SpeedButton1Click(Sender: TObject);

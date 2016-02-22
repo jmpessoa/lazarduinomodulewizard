@@ -6,7 +6,7 @@ interface
 
 uses
   inifiles, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, ComCtrls, LazIDEIntf;
+  StdCtrls, Buttons, ExtCtrls, ComCtrls, LazIDEIntf {$IFDEF WINDOWS}, Registry {$ENDIF} ;
 
 type
 
@@ -15,13 +15,16 @@ type
   TFormLamwinoSettingsPaths  = class(TForm)
     BitBtnOK: TBitBtn;
     BitBtnCancel: TBitBtn;
-    EditCOMPort: TEdit;
+    ComboBoxCOMPort: TComboBox;
+    EditCodeTemplates: TEdit;
     EditPathToArduinoIDE: TEdit;
     Label1: TLabel;
+    Label2: TLabel;
     LabelPathToArduinoIDE: TLabel;
     SelDirDlgPathToArduinoIDE: TSelectDirectoryDialog;
     SpBPathToArduinoIDE: TSpeedButton;
     SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
     StatusBar1: TStatusBar;
     procedure BitBtnOKClick(Sender: TObject);
     procedure BitBtnCancelClick(Sender: TObject);
@@ -30,6 +33,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure SpBPathToArduinoIDEClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
   private
     { private declarations }
     FOk: boolean;
@@ -96,31 +100,64 @@ begin
   end;
 end;
 
+//ref. http://forum.lazarus.freepascal.org/index.php?topic=14313.0
 procedure TFormLamwinoSettingsPaths.SpeedButton1Click(Sender: TObject);
+var
+  {$IFDEF WINDOWS}
+  reg: TRegistry;
+  l: TStringList;
+  n: integer;
+  {$ENDIF}
+  res: string;
 begin
+  //ShowMessage('Please, check if Arduino and PC are connecteds via USB!');
+  res:='';
+  ComboBoxCOMPort.Items.Clear;
+  {$IFDEF WINDOWS}
+  l:= TStringList.Create;
+  reg:= TRegistry.Create;
+  try
+    {$IFNDEF VER100}
+    reg.Access:= KEY_READ;
+    {$ENDIF}
+    reg.RootKey:= HKEY_LOCAL_MACHINE;
+    reg.OpenKeyReadOnly('HARDWARE\DEVICEMAP\SERIALCOMM');//, false);
+    reg.GetValueNames(l);
 
-ShowMessage('If Arduino is connected' + sLineBreak +
-'and installed [drive!], try:'+sLineBreak +sLineBreak +
-'1.Windows 10' + sLineBreak +
-'Start Menu' + sLineBreak +
-'Settings' + sLineBreak +
-'Devices' + sLineBreak +
-'Connected Devices' + sLineBreak + sLineBreak +
-'2. All Windows:' + sLineBreak +
-'Controls Panel' + sLineBreak +
-'Device Manager' + sLineBreak +
-'Ports(COM & LPT)');
+    for n:= 0 to l.Count - 1 do
+    begin
+      ComboBoxCOMPort.Items.Add(reg.ReadString(l[n]));
+    end;
 
+  finally
+    reg.Free;
+    l.Free;
+  end;
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    ShowMessage('Sorry... Not implemented yet...[LINUX]');
+  {$ENDIF}
+
+end;
+
+procedure TFormLamwinoSettingsPaths.SpeedButton2Click(Sender: TObject);
+begin
+    if SelDirDlgPathToArduinoIDE.Execute then
+  begin
+    EditCodeTemplates.Text := SelDirDlgPathToArduinoIDE.FileName;
+  end;
 end;
 
 procedure TFormLamwinoSettingsPaths.LoadSettings(const fileName: string);
 begin
   with TIniFile.Create(fileName) do
   try
-      EditPathToArduinoIDE.Text := ReadString('NewProject','PathToArduinoIDE', '');
-      EditCOMPort.Text := ReadString('NewProject','COMPort', '');
+     EditPathToArduinoIDE.Text := ReadString('NewProject','PathToArduinoIDE', '');
+     ComboBoxCOMPort.Text := ReadString('NewProject','COMPort', '');
+     EditCodeTemplates.Text:= ReadString('NewProject','PathToCodeTemplates', '');
   finally
-      Free;
+     Free;
   end;
 end;
 
@@ -129,7 +166,8 @@ begin
   with TInifile.Create(fileName) do
   try
      WriteString('NewProject', 'PathToArduinoIDE', EditPathToArduinoIDE.Text);
-     WriteString('NewProject', 'COMPort', EditCOMPort.Text);
+     WriteString('NewProject', 'COMPort', ComboBoxCOMPort.Text);
+     WriteString('NewProject', 'PathToCodeTemplates', EditCodeTemplates.Text);
   finally
      Free;
   end;

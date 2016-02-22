@@ -1,6 +1,6 @@
 
 Lamwino: Lazarus Arduino Module Wizard: 
-	Version 0.1 - 14 Feb - 2016		
+	Version 0.1		
 
 	"A wizard to create Arduino loadable module (.hex) using Lazarus/Free Pascal"
 		https://github.com/jmpessoa/lazarduinomodulewizard
@@ -24,6 +24,19 @@ Lamwino: Lazarus Arduino Module Wizard:
 		-HatForCat
 		-Engkin 
 			ref. http://forum.lazarus.freepascal.org/index.php/topic,30960.msg201921.html#msg201921
+
+Version 0.1 revision 02 - 22 Feb - 2016
+
+	NEW! Added support to Serial [COM]
+
+	NEW! LamwinoDemo3 [Serial demo] //<---- Please, use some "Serial Monitor" app to send and receive info...
+
+	WARNING! Please, configure NEW "Path do code Templates"
+		IDE menu "Tools" --> [Lamwino] Arduino Module Wizard --> Settings
+
+	IMPROVED! Added support to commons Arduino chip
+
+	IMPROVED! Usability
 
 Version 0.1 revision 01 - 14 Feb - 2016
 
