@@ -72,7 +72,7 @@ var
   USART_UBBR: byte;
 begin
 
-    StringTerminator:= '$';
+    StringTerminator:= '\';
 
     USART_UBBR:= byte(16000000 div usart_baud div 16) - 1; //U2X0 = 0 --> Assyn normal mod
 
