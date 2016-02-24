@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="2">
+      <Unit0>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LamwinoDemo4"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="33"/>
+        <CursorPos X="16" Y="43"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <UnitName Value="LamwinoAvrSerial"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="305"/>
+        <CursorPos X="25" Y="306"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+    </Units>
+    <JumpHistory Count="13" HistoryIndex="12">
+      <Position1>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <Caret Line="45" Column="30" TopLine="29"/>
+      </Position1>
+      <Position2>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <Caret Line="44" Column="31" TopLine="29"/>
+      </Position2>
+      <Position3>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="31" Column="24" TopLine="25"/>
+      </Position3>
+      <Position4>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="32" Column="25" TopLine="25"/>
+      </Position4>
+      <Position5>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="181" Column="28" TopLine="157"/>
+      </Position5>
+      <Position6>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="320" Column="25" TopLine="304"/>
+      </Position6>
+      <Position7>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <Caret Line="41" Column="28" TopLine="26"/>
+      </Position7>
+      <Position8>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <Caret Line="49" Column="17" TopLine="31"/>
+      </Position8>
+      <Position9>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="24" Column="24" TopLine="12"/>
+      </Position9>
+      <Position10>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="42" Column="24" TopLine="22"/>
+      </Position10>
+      <Position11>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="46" Column="24" TopLine="26"/>
+      </Position11>
+      <Position12>
+        <Filename Value="lamwinodemo4.lpr"/>
+        <Caret Line="49" Column="19" TopLine="31"/>
+      </Position12>
+      <Position13>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Column="22"/>
+      </Position13>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

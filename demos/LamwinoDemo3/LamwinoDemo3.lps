@@ -9,9 +9,7 @@
         <Filename Value="lamwinodemo3.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LamwinoDemo3"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="46"/>
-        <CursorPos X="13" Y="62"/>
+        <CursorPos X="39" Y="16"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -20,10 +18,11 @@
         <Filename Value="lamwinoavrserial.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LamwinoAvrSerial"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="219"/>
-        <CursorPos X="14" Y="243"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="26" Y="5"/>
         <UsageCount Value="54"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -63,7 +62,7 @@
         <UsageCount Value="7"/>
       </Unit6>
     </Units>
-    <JumpHistory Count="12" HistoryIndex="11">
+    <JumpHistory Count="13" HistoryIndex="12">
       <Position1>
         <Filename Value="lamwinodemo3.lpr"/>
         <Caret Line="47" Column="27" TopLine="39"/>
@@ -112,6 +111,10 @@
         <Filename Value="lamwinodemo3.lpr"/>
         <Caret Line="31" Column="17" TopLine="21"/>
       </Position12>
+      <Position13>
+        <Filename Value="lamwinoavrserial.pas"/>
+        <Caret Line="243" Column="14" TopLine="219"/>
+      </Position13>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

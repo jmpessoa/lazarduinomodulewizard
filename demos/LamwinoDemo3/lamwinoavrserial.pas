@@ -1,56 +1,55 @@
-unit LamwinoAvrSerial;
+unit LamwinoAvrSerial; {version 0.1 revision 03 - 24 Fev - 2016}
 
 {$mode delphi}
 
 (*references
-http://brittonkerin.com/cduino/lessons.html
-http://www.delphitricks.com/source-code/math/convert_a_binary_number_into_a_decimal_number.html
-http://www.swissdelphicenter.ch/torry/showcode.php?id=442
-http://programmersheaven.com/discussion/389747/binary-to-decimal-and-decimal-to-binary-conversion
-http://galfar.vevb.net/wp/2009/shift-right-delphi-vs-c/
-https://sites.google.com/site/myfeup/avr/avr-gcc/usart
+ http://brittonkerin.com/cduino/lessons.html
+ http://www.delphitricks.com/source-code/math/convert_a_binary_number_into_a_decimal_number.html
+ http://www.swissdelphicenter.ch/torry/showcode.php?id=442
+ http://programmersheaven.com/discussion/389747/binary-to-decimal-and-decimal-to-binary-conversion
+ http://galfar.vevb.net/wp/2009/shift-right-delphi-vs-c/
+ https://sites.google.com/site/myfeup/avr/avr-gcc/usart
 *)
 
 interface
-
-//const
-(*
- Serial_FCPU = 16000000;
- Serial_BAUD = 9600;  //USART
- Serial_UBBR = (Serial_FCPU div Serial_BAUD div 16) - 1; //U2X0 = 0 --> Assyn normal mod
- //TODO:U2X0=1 -->  (160000000 div 8 div 115200) - 1
-*)
 
 type
 
   TAvrSerial = record
 
-    //FCPU: Cardinal;
-    //USART_BAUD: Cardinal;
-    //USART_UBBR: byte;
-
+    StringTerminator: char;
     constructor Init(usart_baud: Cardinal);
 
     procedure WriteChar(c: char);
-
     procedure WriteByte(b: byte);
 
-    function ReadChar(): char;
-    function ReadByte(): byte;
+    function ReadChar(): char; overload;
+    procedure ReadChar(var c: char); overload;
 
+    procedure ReadString(var s: shortstring); overload;
+    function ReadString():shortstring;  overload;
+
+    function ReadDecimalStringAsByte(): byte;  overload;
+    procedure ReadDecimalStringAsByte(var b:byte); overload;
+
+    function ReadByte(): byte;
     procedure Flush();
 
     procedure WriteString(PStr: PChar; len: integer);   overload;
     procedure WriteString(PStr: PChar);    overload;
+    procedure WriteString(str: shortstring);    overload;
 
     procedure WriteByteAsBinaryString(value: byte);
-
     function BinaryStringToByte(PBinaryString: PChar): byte;
     procedure ByteToBinaryString(value: byte; binStrBuffer: PChar);
 
     procedure WriteByteAsDecimalString(value: byte);
-
     procedure WriteLineBreak();
+
+    function DecimalStringToByte(decStr: shortstring): byte;
+    function ByteToDecimalString(value: byte): shortstring;
+
+    function IsDigit(c: char): boolean;
 
   end;
 
@@ -72,6 +71,8 @@ constructor TAvrSerial.Init(usart_baud: Cardinal);
 var
   USART_UBBR: byte;
 begin
+
+    StringTerminator:= '$';
 
     USART_UBBR:= byte(16000000 div usart_baud div 16) - 1; //U2X0 = 0 --> Assyn normal mod
 
@@ -145,6 +146,34 @@ begin
   Result:= char(UDR0);
 end;
 
+procedure TAvrSerial.ReadChar(var c: char);
+begin
+    c:= ReadChar();
+end;
+
+procedure TAvrSerial.ReadString(var s: shortstring);
+var
+  count: byte;
+  c: char;
+begin
+  c:= ReadChar();
+  count:= 1;
+  while (count < 255) and (c <> StringTerminator) do
+  begin
+     s[count]:= c;
+     c:= ReadChar();
+     Inc(count);
+  end;
+  s[0]:= char(count-1);
+end;
+
+function TAvrSerial.ReadString():shortstring;
+var
+  s: shortstring;
+begin
+   ReadString(s);
+   Result:= s;
+end;
 
 function TAvrSerial.ReadByte(): byte;
 var
@@ -191,6 +220,17 @@ begin
      Self.WriteChar( char(PStr[i]) );
 end;
 
+procedure TAvrSerial.WriteString(str: shortstring);    overload;
+var
+  p: PChar;
+  i, count: byte;
+begin
+  count:= byte(str[0]);
+  p:= @str[1];
+  for i:=0  to count-1 do
+     Self.WriteChar( char(p[i]) );
+end;
+
 function TAvrSerial.BinaryStringToByte(PBinaryString: PChar): byte;
 var
   i: byte;
@@ -234,9 +274,56 @@ var
   t: byte;
 begin
   t:= value mod 100;
-  Self.WriteChar(char( ORD('0') + (value div 100) ));
+
+  if (value div 100) <> 0 then
+    Self.WriteChar(char( ORD('0') + (value div 100) ));
+
   Self.WriteChar(char( ORD('0') + (t div 10)  ));
   Self.WriteChar(char( ORD('0') + (t mod 10)  ));
+end;
+
+function TAvrSerial.IsDigit(c: char): boolean;
+begin
+  if (ord(c)<48) or (ord(c)>57) then
+     Result:=False
+  else
+    Result:= True;
+end;
+
+function TAvrSerial.DecimalStringToByte(decStr: shortstring): byte;
+var
+  value: byte;
+  error: integer;
+begin
+  Val(decStr, value, error);
+  if error > 0 then
+    Result:= 0
+  else
+    Result:=  value;
+end;
+
+function TAvrSerial.ByteToDecimalString(value: byte): shortstring;
+var
+  strValue: shortstring;
+begin
+  Str(value, strValue);
+  Result:= strValue;
+end;
+
+function TAvrSerial.ReadDecimalStringAsByte(): byte;
+var
+  strValue: shortstring;
+begin
+  strValue:= ReadString();
+  Result:= DecimalStringToByte(strValue);
+end;
+
+procedure TAvrSerial.ReadDecimalStringAsByte(var b:byte);
+var
+  strValue: shortstring;
+begin
+  strValue:= ReadString();
+  b:= DecimalStringToByte(strValue);
 end;
 
 end.
