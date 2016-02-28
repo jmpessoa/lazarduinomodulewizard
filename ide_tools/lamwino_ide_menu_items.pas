@@ -6,10 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Dialogs, IDECommands, MenuIntf, Forms,
-  uformlamwinosettingspaths, uFormBuildFPCAVRCross;
+  uformlamwinosettingspaths, uFormBuildFPCAVRCross, uFormGetFPCSourceTrunk;
 
 procedure StartPathLamwinoTool(Sender: TObject);
 procedure StartPathToBuildFpcAVRCross(Sender: TObject);
+procedure StartGetFPCSourceTrunk(Sender: TObject);
 
 procedure Register;
 
@@ -31,13 +32,20 @@ begin
   FormBuildFPCAVRCross.ShowModal;
 end;
 
+procedure StartGetFPCSourceTrunk(Sender: TObject);
+begin
+  FormGetFPCSourceTrunk:= TFormGetFPCSourceTrunk.Create(Application);
+  FormGetFPCSourceTrunk.ShowModal;
+end;
+
+
 procedure RunLamwino(Sender: TObject);
 var
   Project: TLazProject;
   pathToArduinoIDE: string;
-  deviceCOMPort, userString, strTemp: string;
+  deviceCOMPort, userString: string;
   configFile: string;
-  p, q, n: integer;
+  p, q: integer;
   Tool: TIDEExternalToolOptions;
   avrCHIP: string;
   projectFullName: string;
@@ -239,8 +247,12 @@ begin
   // Adding first entry
   RegisterIDEMenuCommand(ideSubMnuLamwino, 'PathLamwinoToolCmd', 'Settings [Paths, COM Port, ...]', nil, @StartPathLamwinoTool);
   // Adding 2a. entry
-  RegisterIDEMenuCommand(ideSubMnuLamwino, 'PathToBuildFPCAVRCross', '[Lamwino] Build FPC Cross Arduino', nil, @StartPathToBuildFpcAVRCross);
+  RegisterIDEMenuCommand(ideSubMnuLamwino, 'PathToBuildFPCAVRCross', 'Build FPC Cross Arduino', nil, @StartPathToBuildFpcAVRCross);
+  // Adding 3a. entry
+   RegisterIDEMenuCommand(ideSubMnuLamwino, 'PathToGetFPCTrunk', 'Get FPC Source [Trunk]', nil, @StartGetFPCSourceTrunk);
   // And so on...
+
+
   RegisterIDEMenuCommand(itmRunBuilding, 'RunLamwino', '[Lamwino] Install/Run',nil, @RunLamwino);
 end;
 

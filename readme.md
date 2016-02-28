@@ -25,6 +25,11 @@ Lamwino: Lazarus Arduino Module Wizard:
 		-Engkin 
 			ref. http://forum.lazarus.freepascal.org/index.php/topic,30960.msg201921.html#msg201921
 
+Version 0.1 revision 03 - 24 Fev - 2016
+
+	NEW! Added string support to Serial
+	NEW! LamwinoDemo4 [String Serial demo] //<---- Please, use some "Serial Monitor" app to send and receive info...		
+
 Version 0.1 revision 02 - 22 Feb - 2016
 
 	NEW! Added support to Serial [COM]
@@ -66,10 +71,10 @@ Version 0.1 revision 01 - 14 Feb - 2016
 
 	3.2. Building FPC AVR/Arduino cross compiler
 
+		Lazarus IDE menu "Tools" ---> "[Lamwino] Arduino Module Wizard" -->  "Get FPC Source"	
+			.[if you do not have it!]			
+
 		Lazarus IDE menu "Tools" ---> "[Lamwino] Arduino Module Wizard" -->  "Build FPC Cross Arduino"	
-	
-			.Get FPC Source [if you do not have!]
-				::Note: Path do "FPC Source Code" is mandatory! 
 			.Build
 			.Install
 

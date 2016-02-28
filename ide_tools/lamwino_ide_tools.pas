@@ -8,7 +8,7 @@ interface
 
 uses
   lamwino_ide_menu_items, uFormBuildFPCAVRCross, uformlamwinosettingspaths, 
-  LazarusPackageIntf;
+  uFormGetFPCSourceTrunk, LazarusPackageIntf;
 
 implementation
 

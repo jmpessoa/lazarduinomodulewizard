@@ -15,22 +15,17 @@ type
 TAVRBuildMode = (bmAvr5, bmAvr6);
 
   TFormBuildFPCAVRCross = class(TForm)
-    BitBtn1: TBitBtn;
-    Button1: TButton;
     Button2: TButton;
     Button3: TButton;
     ComboBoxArchitec: TComboBox;
-    EditPathToFPCTrunk: TEdit;
-    EditPathToSVN: TEdit;
     EditPathToArduinoIDE: TEdit;
     EditPathToFpc: TEdit;
+    EditPathToFPCTrunk: TEdit;
     EditPathToFPCUnits: TEdit;
-    GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
-    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -38,35 +33,27 @@ TAVRBuildMode = (bmAvr5, bmAvr6);
     Label6: TLabel;
     Memo1: TMemo;
     PageControl1: TPageControl;
-    Panel1: TPanel;
     Panel3: TPanel;
     RadioGroupInstruction: TRadioGroup;
-    RadioGroup2: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
-    SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
     StatusBar1: TStatusBar;
-    TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
-    procedure BitBtn1Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PageControl1Change(Sender: TObject);
     procedure RadioGroupInstructionClick(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure SpeedButton5Click(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
+
   private
     FBuildMode: TAVRBuildMode;
     { private declarations }
@@ -92,73 +79,7 @@ uses
 
 { TFormBuildFPCAVRCross }
 
-procedure TFormBuildFPCAVRCross.Button1Click(Sender: TObject);
-var
-  svnBinPath: string;
-  fpcTrunkStorePath: string;
-  Tool: TIDEExternalToolOptions;
-  Params: TStringList;
-  strExt: string;
-begin
 
-  {$IFDEF LINUX}
-    if MessageDlg('Warning...', 'Lamw can not Build/Install cross compiler [until now] on Linux. Continue?',
-                   mtConfirmation, [mbYes, mbNo],0) = mrNO then Exit;
-  {$ENDIF}
-
-  svnBinPath:= Trim(EditPathToSVN.Text);         //C:\Program Files (x86)\SlikSvn\bin
-  fpcTrunkStorePath:= Trim(EditPathToFPCTrunk.Text);  //C:\adt32\fpctrunksource
-
-  if (svnBinPath = '') or  (fpcTrunkStorePath = '') then
-  begin
-    ShowMessage('Sorry... Empty Info...');
-    Exit;
-  end;
-
-  ForceDirectories(fpcTrunkStorePath);
-
-  strExt:= '';
-
-  {$IFDEF WINDOWS}
-     strExt:= '.exe';
-  {$ENDIF}
-
-  Params:= TStringList.Create;
-  Params.Delimiter:= ' ';
-  Tool := TIDEExternalToolOptions.Create;
-  try
-
-    Tool.Title := 'Running Extern [svn] Tool... ';
-
-    //Tool.WorkingDirectory := fpcTrunkStorePath;
-
-    Tool.Executable := svnBinPath + DirectorySeparator+ 'svn'+ strExt;
-
-    Params.Add('co');                  //checkout the latest trunk sources of FPC
-    if RadioGroup2.ItemIndex = 0 then
-       Params.Add('http://svn.freepascal.org/svn/fpc/trunk')
-    else  //release ... TODO: need test!
-       Params.Add('http://svn.freepascal.org/svn/fpc/tags/release_3_0_0');
-
-    Params.Add(fpcTrunkStorePath);
-
-    Tool.CmdLineParams := Params.DelimitedText;
-    Tool.Scanners.Add(SubToolDefault);
-
-    if not RunExternalTool(Tool) then
-      raise Exception.Create('Cannot Run Extern [svn] Tool!');
-
-  finally
-    Tool.Free;
-    Params.Free;
-  end;
-  StatusBar1.SimpleText:='Success! [Downloaded FPC Trunk]!';
-end;
-
-procedure TFormBuildFPCAVRCross.BitBtn1Click(Sender: TObject);
-begin
-  Self.Close;
-end;
 
 procedure TFormBuildFPCAVRCross.Button2Click(Sender: TObject);
 var
@@ -521,29 +442,30 @@ end;
 
 procedure TFormBuildFPCAVRCross.PageControl1Change(Sender: TObject);
 begin
+
+  StatusBar1.SimpleText:='';
   if PageControl1.ActivePageIndex <> 0 then
   begin
     if EditPathToFPCTrunk.Text = '' then
     begin
-
-       ShowMessage('Please, Enter Path to FPC Source...');
+       ShowMessage('Please, Enter Path to FPC Source [trunk]...');
+       PageControl1.ActivePageIndex:= 0;
+       Exit;
+    end;
+    if EditPathToFpc.Text = '' then
+    begin
+       ShowMessage('Please, Enter Path to FPC [make]...');
        PageControl1.ActivePageIndex:= 0;
        Exit;
     end;
   end;
 
-  StatusBar1.SimpleText:='';
-  if PageControl1.PageIndex = 2 then
+  if PageControl1.PageIndex = 1 then
   begin
      case FBuildMode of
         bmAvr5: GroupBox3.Caption:= 'Install Cross Avr5 Arduino';
         bmAvr6: GroupBox3.Caption:= 'Install Cross Avr6 Arduino';
      end;
-  end;
-
-  if PageControl1.PageIndex = 0 then
-  begin
-    StatusBar1.SimpleText:=  '    * Mandatory...        ** Only if you do not have FPC trunk source';
   end;
 
 end;
@@ -558,12 +480,6 @@ begin
   FillComboArchitec();
   ComboBoxArchitec.ItemIndex:= 0;
 
-end;
-
-procedure TFormBuildFPCAVRCross.SpeedButton1Click(Sender: TObject);
-begin
-  if SelectDirectoryDialog1.Execute then
-     EditPathToSVN.Text:=SelectDirectoryDialog1.FileName;
 end;
 
 procedure TFormBuildFPCAVRCross.SpeedButton2Click(Sender: TObject);
@@ -588,15 +504,6 @@ procedure TFormBuildFPCAVRCross.SpeedButton5Click(Sender: TObject);
 begin
   if SelectDirectoryDialog1.Execute then
      EditPathToFPCUnits.Text:=SelectDirectoryDialog1.FileName;
-end;
-
-procedure TFormBuildFPCAVRCross.SpeedButton6Click(Sender: TObject);
-var
-  auxStr: string;
-begin
-  auxStr:='https://sliksvn.com/pub/Slik-Subversion-1.8.11-win32.msi';
-  //InputBox('Get svn client', 'You can get a command line svn client from here:', auxStr);
-  ShowMessage('Hint: a command line svn client is here:'+ sLineBreak + auxStr);
 end;
 
 //ref. http://stackoverflow.com/questions/9278513/lazarus-free-pascal-how-to-recursively-copy-a-source-directory-of-files-to-a
